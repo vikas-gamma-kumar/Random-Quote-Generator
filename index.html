@@ -1,1 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Quote Generator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;                                                                                                             
+            display: flex;
+            justify-content: center;                                                                                                                                                     
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff6f61, #de425b);
+            color: #fff;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        #quote {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff6f61;
+            color: #fff;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #de425b;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 20px;
+            }
+            #quote {
+                font-size: 18px;
+            }
+            button {
+                font-size: 16px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <div id="quote">Press the button to get a random quote!</div>
+    <div>
+        <button onclick="generateQuote()">New Quote</button>
+        <button onclick="copyQuote()">📋 Copy Quote</button>
+    </div>
+</div>
+
+<script>
+
+    const quotes = [
+    "The best way to predict the future is to invent it. - Alan Kay",
+    "Life is what happens when you're busy making other plans. - John Lennon",
+    "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
+    "Success is not the key to happiness. Happiness is the key to success. - Albert Schweitzer",
+    "Do not watch the clock. Do what it does. Keep going. - Sam Levenson",
+    "The best way to predict the future is to invent it. - Alan Kay",
+    "Life is what happens when you're busy making other plans. - John Lennon",
+    "The only limit to our realization of tomorrow is our doubts of today. - Franklin D. Roosevelt",
+    "Success is not the key to happiness. Happiness is the key to success. - Albert Schweitzer",
+    "Do not watch the clock. Do what it does. Keep going. - Sam Levenson",
+    "In the middle of every difficulty lies opportunity. - Albert Einstein",
+    "Believe you can and you're halfway there. - Theodore Roosevelt",
+    "Act as if what you do makes a difference. It does. - William James",
+    "Keep your face always toward the sunshine—and shadows will fall behind you. - Walt Whitman",
+    "What lies behind us and what lies before us are tiny matters compared to what lies within us. - Ralph Waldo Emerson",
+    "You miss 100% of the shots you don’t take. - Wayne Gretzky",
+    "It always seems impossible until it’s done. - Nelson Mandela",
+    "The only way to do great work is to love what you do. - Steve Jobs",
+    "Hardships often prepare ordinary people for an extraordinary destiny. - C.S. Lewis",
+    "It does not matter how slowly you go as long as you do not stop. - Confucius",
+    "Perfection is not attainable, but if we chase perfection we can catch excellence. - Vince Lombardi",
+    "Happiness is not something ready made. It comes from your own actions. - Dalai Lama",
+    "Don't let yesterday take up too much of today. - Will Rogers",
+    "You must be the change you wish to see in the world. - Mahatma Gandhi",
+    "Opportunities don't happen. You create them. - Chris Grosser",
+    "Failure will never overtake me if my determination to succeed is strong enough. - Og Mandino",
+    "It is not length of life, but depth of life. - Ralph Waldo Emerson",
+    "The purpose of our lives is to be happy. - Dalai Lama",
+    "Turn your wounds into wisdom. - Oprah Winfrey",
+    "All our dreams can come true, if we have the courage to pursue them. - Walt Disney",
+    "Everything you’ve ever wanted is on the other side of fear. - George Addair",
+    "Do what you can, with what you have, where you are. - Theodore Roosevelt",
+    "The future belongs to those who believe in the beauty of their dreams. - Eleanor Roosevelt",
+    "Quality is not an act, it is a habit. - Aristotle",
+    "A journey of a thousand miles begins with a single step. - Lao Tzu",
+    "Difficulties in life are intended to make us better, not bitter. - Dan Reeves",
+    "The greatest glory in living lies not in never falling, but in rising every time we fall. - Nelson Mandela",
+    "A problem is a chance for you to do your best. - Duke Ellington",
+    "The only thing we have to fear is fear itself. - Franklin D. Roosevelt",
+    "An unexamined life is not worth living. - Socrates",
+    "Don't be pushed around by the fears in your mind. Be led by the dreams in your heart. - Roy T. Bennett",
+    "Do not wait to strike till the iron is hot, but make it hot by striking. - William B. Sprague",
+    "Every moment is a fresh beginning. - T.S. Eliot",
+    "No pressure, no diamonds. - Thomas Carlyle",
+    "Start where you are. Use what you have. Do what you can. - Arthur Ashe",
+    "You can’t use up creativity. The more you use, the more you have. - Maya Angelou",
+    "The only impossible journey is the one you never begin. - Tony Robbins",
+    "Nothing is impossible, the word itself says ‘I’m possible’! - Audrey Hepburn",
+    "What we achieve inwardly will change outer reality. - Plutarch",
+    "Small deeds done are better than great deeds planned. - Peter Marshall",
+    "If you cannot do great things, do small things in a great way. - Napoleon Hill",
+    "We do not remember days, we remember moments. - Cesare Pavese",
+    "Courage is resistance to fear, mastery of fear—not absence of fear. - Mark Twain",
+    "Do what you feel in your heart to be right—for you’ll be criticized anyway. - Eleanor Roosevelt",
+    "I am not a product of my circumstances. I am a product of my decisions. - Stephen R. Covey",
+    "Everything you’ve ever wanted is on the other side of fear. - George Addair",
+    "You never fail until you stop trying. - Albert Einstein",
+    "The harder the battle, the sweeter the victory. - Les Brown",
+    "Effort only fully releases its reward after a person refuses to quit. - Napoleon Hill",
+    "There is no failure, only feedback. - Robert Allen",
+    "You are never too old to set another goal or to dream a new dream. - C.S. Lewis",
+    "The bad news is time flies. The good news is you’re the pilot. - Michael Altshuler",
+    "The more you praise and celebrate your life, the more there is in life to celebrate. - Oprah Winfrey",
+    "You define your own life. Don't let other people write your script. - Oprah Winfrey",
+    "Live life as if everything is rigged in your favor. - Rumi",
+    "You don’t need to see the whole staircase, just take the first step. - Martin Luther King Jr.",
+    "Keep going. Be all in. - Bryan Hutchinson",
+    "The best way out is always through. - Robert Frost",
+    "Do not be embarrassed by your failures, learn from them and start again. - Richard Branson",
+    "Life is really simple, but we insist on making it complicated. - Confucius",
+    "It always seems impossible until it’s done. - Nelson Mandela",
+    "You must expect great things of yourself before you can do them. - Michael Jordan",
+    "We cannot solve problems with the kind of thinking we employed when we came up with them. - Albert Einstein",
+    "It is never too late to be what you might have been. - George Eliot",
+    "You get in life what you have the courage to ask for. - Oprah Winfrey",
+    "It’s not about how hard you hit. It’s about how hard you can get hit and keep moving forward. - Rocky Balboa",
+    "Success is getting what you want. Happiness is wanting what you get. - Dale Carnegie",
+    "Don’t let the fear of losing be greater than the excitement of winning. - Robert Kiyosaki",
+    "All great things have small beginnings. - Peter Senge",
+    "Success is stumbling from failure to failure with no loss of enthusiasm. - Winston Churchill"
+];
+
+
+    
+
+    function generateQuote() {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        document.getElementById('quote').innerText = quotes[randomIndex];
+    }
+
+    function copyQuote() {
+        const quoteText = document.getElementById('quote').innerText;
+        navigator.clipboard.writeText(quoteText).then(() => {
+            alert("Quote copied to clipboard!");
+        });
+    }
+</script>
+
+</body>
+</html> 
